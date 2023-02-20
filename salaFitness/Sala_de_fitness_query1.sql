@@ -1,0 +1,76 @@
+CREATE DATABASE Sala_de_fitness;
+GO
+USE Sala_de_fitness;
+
+CREATE TABLE Adresa
+(idAdresa INT PRIMARY KEY IDENTITY,
+oras NVARCHAR(100),
+strada NVARCHAR(100),
+numar INT
+);
+
+CREATE TABLE Furnizor
+(idFurnizor INT PRIMARY KEY IDENTITY,
+denumire NVARCHAR(100)
+);
+
+CREATE TABLE Manager
+(idManager INT PRIMARY KEY IDENTITY,
+nume NVARCHAR(100),
+prenume NVARCHAR(100),
+idFurnizor INT FOREIGN KEY REFERENCES Furnizor(idFurnizor) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Program
+(idProgram INT PRIMARY KEY IDENTITY,
+oraDeschidere DATETIME,
+oraInchidere DATETIME,
+idManager INT FOREIGN KEY REFERENCES Manager(idManager) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Angajat
+(idAngajat INT PRIMARY KEY IDENTITY,
+nume NVARCHAR(100),
+prenume NVARCHAR(100),
+idManager INT FOREIGN KEY REFERENCES Manager(idManager) ON UPDATE CASCADE ON DELETE CASCADE,
+idAdresa INT FOREIGN KEY REFERENCES Adresa(idAdresa) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Aparat
+(idAparat INT PRIMARY KEY IDENTITY,
+tip NVARCHAR(100),
+idFurnizor INT FOREIGN KEY REFERENCES Furnizor(idFurnizor) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Antrenor
+(idAntrenor INT PRIMARY KEY IDENTITY,
+nume NVARCHAR(100),
+prenume NVARCHAR(100),
+varsta INT
+);
+
+CREATE TABLE Abonament
+(idAbonament INT PRIMARY KEY IDENTITY,
+tip NVARCHAR(100),
+durata VARCHAR(100),
+pret INT
+);
+
+CREATE TABLE Client
+(idClient INT PRIMARY KEY IDENTITY,
+nume VARCHAR(100),
+prenume VARCHAR(100),
+idAntrenor INT FOREIGN KEY REFERENCES Antrenor(idAntrenor) ON UPDATE CASCADE ON DELETE CASCADE,
+idAbonament INT FOREIGN KEY REFERENCES Abonament(idAbonament) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Exercitiu
+(idClient INT,
+idAparat INT,
+CONSTRAINT fk_client_exercitiu FOREIGN KEY(idClient) REFERENCES Client(idClient),
+CONSTRAINT fk_aparat_exercitiu FOREIGN KEY(idAparat) REFERENCES Aparat(idAparat),
+CONSTRAINT pk_exercitu PRIMARY KEY(idClient, idAparat)
+);
+
+CREATE TABLE Versiune
+(idVersiune int);
